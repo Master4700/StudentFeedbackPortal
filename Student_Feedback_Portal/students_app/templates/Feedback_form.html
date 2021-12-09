@@ -1,0 +1,101 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="icon" href="" type = "image/gif" sizes = "16x16">
+    
+    <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark ">
+        <a class="navbar-brand" href="#">{{curr_user}}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               Faculty Name
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% for user in user_list  %}
+                <a class="dropdown-item" href="{% url 'feedback_page_with_Name' user.username %}">{{ user.username }}</a>
+                {% endfor %}  
+              </div>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'student_logout' %}">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+  </head>
+  <body class = "bg-light">
+      <br>
+    <div class="container border  border-primary"> 
+
+        <br>
+        {% if messages %}
+        {% for message in messages %}
+            <div class = "alert alert-info alert-dismissible fade show" role = "alert">
+                {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+        {% endfor%}
+    {% endif %}
+        {% if professor %}
+            <br>   
+            <h1 class='col-lg-12'> Feedback Form for {{ prof_name }}</h1> 
+            <br> 
+            <br>
+            <form method = "POST">
+                {% csrf_token %}
+                <input type = "hidden" name = "batch" value = "{{curr_user}}">
+                <input type = "hidden" name = "professor" value = "{{ prof_name }}">
+                    {% for Question in questions %}
+                        <h5>
+                        <label class = "col-lg-12">{{Question.id}}) {{ Question.question }}</label>
+                        {% comment %} </h5>
+                        <h5>
+                           {% endcomment %}
+                        <select id="{{Question.id}}" name="response{{Question.id}}" class="col-lg-2 ">
+                                <option value="1">1 - Very Poor</option>
+                                <option value="2">2 - Poor</option>
+                                <option value="3">3 - Neutral</option>
+                                <option value="4">4 - Good</option>
+                                <option value="5">5 - Very Good</option>
+                        </select>
+                        </h5> 
+                        
+                        <br>
+                        <br>
+                    {% endfor %}
+                    <button type ="submit" class = "btn btn-primary col-lg-2"> Submit </button>
+            </form>
+        {% else %}
+            <h3>Please Select a Professor to Submit the Feedback</h3>
+            <h4>Read the Following Representation of the Option:</h4>
+            <h4>1 - Very Poor</h4>
+            <h4>2 - Poor</h4>
+            <h4>3 - Neutral</h4>
+            <h4>4 - Good</h4>
+            <h4>5 - Very Good</h4>
+            
+        {% endif %}
+    </div>
+    <br>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  </body>
+</html>
